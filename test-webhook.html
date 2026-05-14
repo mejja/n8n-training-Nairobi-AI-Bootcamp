@@ -36,9 +36,7 @@
             margin-bottom: 24px;
         }
 
-        .form-group {
-            margin-bottom: 16px;
-        }
+        .form-group { margin-bottom: 16px; }
 
         label {
             display: block;
@@ -99,29 +97,10 @@
             line-height: 1.7;
         }
 
-        #status.loading {
-            background: #e8f0fe;
-            color: #1a56db;
-            border: 1px solid #c3d9fd;
-        }
-
-        #status.success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #b8dfc4;
-        }
-
-        #status.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f1aeb5;
-        }
-
-        #status a {
-            color: inherit;
-            font-weight: 600;
-            word-break: break-all;
-        }
+        #status.loading { background: #e8f0fe; color: #1a56db; border: 1px solid #c3d9fd; }
+        #status.success { background: #d4edda; color: #155724; border: 1px solid #b8dfc4; }
+        #status.error   { background: #f8d7da; color: #721c24; border: 1px solid #f1aeb5; }
+        #status a { color: inherit; font-weight: 600; word-break: break-all; }
 
         .debug {
             margin-top: 16px;
@@ -192,12 +171,8 @@
     </div>
 
     <script>
-        // ─────────────────────────────────────────────────────────────────────
-        // CONFIGURATION — only edit these two values
-        // ─────────────────────────────────────────────────────────────────────
         const WEBHOOK_URL = 'https://nairobialcommunity.app.n8n.cloud/webhook-test/a2b2caa0-1964-47d5-a10a-77a1f4666b47';
-        const API_KEY     = 'your-secret-key-12345'; // ← replace with your Header Auth account 54 secret value
-        // ─────────────────────────────────────────────────────────────────────
+        const API_KEY     = 'secret123';
 
         const form      = document.getElementById('invoiceForm');
         const status    = document.getElementById('status');
@@ -210,12 +185,10 @@
             const formData = new FormData(form);
             const data = Object.fromEntries(formData);
 
-            // Show loading state
             setStatus('loading', '⏳ Sending to n8n... please wait.');
             submitBtn.disabled = true;
             submitBtn.textContent = 'Generating...';
 
-            // Show outgoing payload in debug panel
             debugBox.style.display = 'block';
             debugBox.textContent = '→ Sending payload:\n' + JSON.stringify(data, null, 2);
 
@@ -231,7 +204,6 @@
 
                 const result = await response.json();
 
-                // Append n8n response to debug panel
                 debugBox.textContent +=
                     '\n\n← n8n response (' + response.status + '):\n' +
                     JSON.stringify(result, null, 2);
