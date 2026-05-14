@@ -3,67 +3,269 @@
 <head>
     <title>Invoice Generator</title>
     <style>
-        body { font-family: Arial; max-width: 600px; margin: 50px auto; }
-        form { background: #f5f5f5; padding: 20px; border-radius: 5px; }
-        input, select, textarea { width: 100%; padding: 8px; margin: 10px 0; }
-        button { background: #007bff; color: white; padding: 10px 20px; border: none; cursor: pointer; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 16px;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+            padding: 32px;
+            width: 100%;
+            max-width: 560px;
+        }
+
+        h1 {
+            font-size: 22px;
+            color: #1a1a2e;
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 5px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #333;
+            background: #fafafa;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #007bff;
+            background: #fff;
+        }
+
+        textarea { resize: vertical; min-height: 80px; }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: background 0.2s;
+        }
+
+        button[type="submit"]:hover { background: #0056b3; }
+        button[type="submit"]:disabled { background: #89b8f5; cursor: not-allowed; }
+
+        #status {
+            display: none;
+            margin-top: 20px;
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        #status.loading {
+            background: #e8f0fe;
+            color: #1a56db;
+            border: 1px solid #c3d9fd;
+        }
+
+        #status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #b8dfc4;
+        }
+
+        #status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f1aeb5;
+        }
+
+        #status a {
+            color: inherit;
+            font-weight: 600;
+            word-break: break-all;
+        }
+
+        .debug {
+            margin-top: 16px;
+            background: #1e1e2e;
+            color: #a6e3a1;
+            padding: 14px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 12px;
+            display: none;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
     </style>
 </head>
 <body>
-    <h1>Generate Invoice</h1>
-    <form id="invoiceForm">
-        <label>Business Type:</label>
-        <select name="business_type" required>
-            <option value="">Select...</option>
-            <option value="tech-consulting">Tech Consulting</option>
-            <option value="service-provider">Service Provider</option>
-        </select>
+    <div class="card">
+        <h1>📄 Invoice Generator</h1>
+        <p class="subtitle">Nairobi AI Bootcamp — n8n Assignment 3</p>
 
-        <label>Client/Customer Name:</label>
-        <input type="text" name="client_name" required>
+        <form id="invoiceForm">
 
-        <label>Invoice Number/ID:</label>
-        <input type="text" name="invoice_number" required>
+            <div class="form-group">
+                <label>Business Type</label>
+                <select name="business_type" required>
+                    <option value="">Select business type...</option>
+                    <option value="tech-consulting">Tech Consulting</option>
+                    <option value="service-provider">Service Provider</option>
+                </select>
+            </div>
 
-        <label>Amount:</label>
-        <input type="number" name="amount" step="0.01" required>
+            <div class="form-group">
+                <label>Client / Customer Name</label>
+                <input type="text" name="client_name" placeholder="e.g. John Doe" required>
+            </div>
 
-        <label>Description:</label>
-        <textarea name="description"></textarea>
+            <div class="row">
+                <div class="form-group">
+                    <label>Invoice Number</label>
+                    <input type="text" name="invoice_number" placeholder="e.g. INV-001" required>
+                </div>
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" name="date" required>
+                </div>
+            </div>
 
-        <label>Date:</label>
-        <input type="date" name="date" required>
+            <div class="form-group">
+                <label>Amount (KES)</label>
+                <input type="number" name="amount" placeholder="e.g. 15000" step="0.01" required>
+            </div>
 
-        <label>Email:</label>
-        <input type="email" name="email" required>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea name="description" placeholder="e.g. Website development services for Q1 2025"></textarea>
+            </div>
 
-        <button type="submit">Generate Invoice</button>
-    </form>
+            <div class="form-group">
+                <label>Client Email</label>
+                <input type="email" name="email" placeholder="e.g. client@example.com" required>
+            </div>
+
+            <button type="submit" id="submitBtn">Generate Invoice</button>
+        </form>
+
+        <div id="status"></div>
+        <div class="debug" id="debug"></div>
+    </div>
 
     <script>
-        const form = document.getElementById('invoiceForm');
+        // ─────────────────────────────────────────────────────────────────────
+        // CONFIGURATION — only edit these two values
+        // ─────────────────────────────────────────────────────────────────────
+        const WEBHOOK_URL = 'https://nairobialcommunity.app.n8n.cloud/webhook-test/a2b2caa0-1964-47d5-a10a-77a1f4666b47';
+        const API_KEY     = 'your-secret-key-12345'; // ← replace with your Header Auth account 54 secret value
+        // ─────────────────────────────────────────────────────────────────────
+
+        const form      = document.getElementById('invoiceForm');
+        const status    = document.getElementById('status');
+        const submitBtn = document.getElementById('submitBtn');
+        const debugBox  = document.getElementById('debug');
+
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             const formData = new FormData(form);
             const data = Object.fromEntries(formData);
 
+            // Show loading state
+            setStatus('loading', '⏳ Sending to n8n... please wait.');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Generating...';
+
+            // Show outgoing payload in debug panel
+            debugBox.style.display = 'block';
+            debugBox.textContent = '→ Sending payload:\n' + JSON.stringify(data, null, 2);
+
             try {
-                const response = await fetch('http://localhost:5678/webhook/invoice-submit', {
+                const response = await fetch(WEBHOOK_URL, {
                     method: 'POST',
                     headers: {
-                        'X-API-Key': 'your-secret-key-12345',
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'api-key': API_KEY
                     },
                     body: JSON.stringify(data)
                 });
 
                 const result = await response.json();
-                alert('Invoice generated! PDF URL: ' + result.pdf_url);
+
+                // Append n8n response to debug panel
+                debugBox.textContent +=
+                    '\n\n← n8n response (' + response.status + '):\n' +
+                    JSON.stringify(result, null, 2);
+
+                if (response.ok) {
+                    setStatus('success', `
+                        ✅ <strong>Invoice generated successfully!</strong><br><br>
+                        📎 <strong>PDF URL:</strong>
+                            <a href="${result.pdf_url}" target="_blank">${result.pdf_url ?? 'N/A'}</a><br>
+                        🔢 <strong>Invoice #:</strong> ${result.invoice_number ?? data.invoice_number}<br>
+                        👤 <strong>Client:</strong> ${result.client ?? data.client_name}<br>
+                        💰 <strong>Total (incl. 16% VAT):</strong> KES ${result.amount ?? 'N/A'}
+                    `);
+                } else {
+                    throw new Error(result.message || 'n8n returned status ' + response.status);
+                }
+
             } catch (error) {
-                alert('Error: ' + error.message);
+                debugBox.textContent += '\n\n❌ Error: ' + error.message;
+                setStatus('error',
+                    '❌ <strong>Error:</strong> ' + error.message +
+                    '<br><small>Check the debug panel below and your n8n execution log.</small>'
+                );
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Generate Invoice';
             }
         });
+
+        function setStatus(type, html) {
+            status.style.display = 'block';
+            status.className = type;
+            status.innerHTML = html;
+        }
     </script>
 </body>
 </html>
